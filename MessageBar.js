@@ -54,8 +54,8 @@ class MessageBar extends Component {
       duration: props.duration || 3000,
 
       /* Hide setters */
-      shouldHideAfterDelay: (!props.shouldHideAfterDelay) ? true : props.shouldHideAfterDelay,
-      shouldHideOnTap: (!props.shouldHideOnTap) ? true : props.shouldHideOnTap,
+      shouldHideAfterDelay: (props.shouldHideAfterDelay) ? true : props.shouldHideAfterDelay,
+      shouldHideOnTap: (props.shouldHideOnTap) ? true : props.shouldHideOnTap,
 
       /* Callbacks method on Alert Tapped, on Alert Show, on Alert Hide */
       onTapped: props.onTapped,
@@ -104,8 +104,6 @@ class MessageBar extends Component {
   * Show the alert
   */
   showMessageBarAlert() {
-    console.log('this.alertShown', this.alertShown);
-    console.log('this.state', this.state);
     // If an alert is already shonw or doesn't have a title or a message, do nothing
     if (this.alertShown || (!this.state.title && !this.state.message)) {
       return;
@@ -128,9 +126,9 @@ class MessageBar extends Component {
   _showMessageBarAlertComplete() {
     // Execute onShow callback if any
     this._onShow();
-
     // If the duration is null, do not hide the
     if (this.state.shouldHideAfterDelay) {
+      console.log('after shouldHideAfterDelay');
       this.timeoutHide = setTimeout(() => {
         this.hideMessageBarAlert();
       }, this.state.duration);
@@ -402,6 +400,5 @@ class MessageBar extends Component {
   }
 
 }
-
 
 module.exports = MessageBar;
