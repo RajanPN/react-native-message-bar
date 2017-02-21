@@ -1,14 +1,5 @@
-/**
- * Name: MessageBar
- * Description: A Message Bar Component displayed at the top of screen
- * https://github.com/KBLNY/react-native-message-bar
- */
-'use strict';
-
-import React, {Component} from 'react'
+import React, { Component } from 'react';
 import {
-  AppRegistry,
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
@@ -17,20 +8,17 @@ import {
   Image,
 } from 'react-native';
 
-let windowWidth = Dimensions.get('window').width
-let windowHeight = Dimensions.get('window').height
-
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 class MessageBar extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
 
     this.animatedValue = new Animated.Value(0);
     this.notifyAlertHiddenCallback = null;
     this.alertShown = false;
     this.timeoutHide = null;
-
     this.state = this.getStateByProps(props);
   }
 
@@ -62,12 +50,12 @@ class MessageBar extends Component {
       title: props.title,
       message: props.message,
       avatar: props.avatar,
-      alertType: props.alertType || 'info',
+      alertType: props.alertType || 'success',
       duration: props.duration || 3000,
 
       /* Hide setters */
-      shouldHideAfterDelay: (props.shouldHideAfterDelay == undefined) ? true : props.shouldHideAfterDelay,
-      shouldHideOnTap: (props.shouldHideOnTap == undefined) ? true : props.shouldHideOnTap,
+      shouldHideAfterDelay: (!props.shouldHideAfterDelay) ? true : props.shouldHideAfterDelay,
+      shouldHideOnTap: (!props.shouldHideOnTap) ? true : props.shouldHideOnTap,
 
       /* Callbacks method on Alert Tapped, on Alert Show, on Alert Hide */
       onTapped: props.onTapped,
@@ -79,23 +67,23 @@ class MessageBar extends Component {
       stylesheetSuccess: props.stylesheetSuccess || { backgroundColor: 'darkgreen', strokeColor: '#b40000' }, // Default are Green colors
       stylesheetWarning: props.stylesheetWarning || { backgroundColor: '#ff9c00', strokeColor: '#f29400' }, // Default are orange colors
       stylesheetError: props.stylesheetError || { backgroundColor: '#ff3232', strokeColor: '#FF0000' }, // Default are red colors
-      stylesheetExtra: props.stylesheetExtra || { backgroundColor: '#007bff', strokeColor: '#006acd' }, // Default are blue colors, same as info
+      stylesheetExtra: props.stylesheetExtra || { backgroundColor: 'transparent', strokeColor: '#006acd' }, // Default are blue colors, same as info
 
       /* Duration of the animation */
       durationToShow: props.durationToShow || 350,
       durationToHide: props.durationToHide || 350,
 
       /* Offset of the View, useful if you have a navigation bar or if you want the alert be shown below another component instead of the top of the screen */
-      viewTopOffset: props.viewTopOffset || 0,
-      viewBottomOffset: props.viewBottomOffset || 0,
-      viewLeftOffset: props.viewLeftOffset || 0,
-      viewRightOffset: props.viewRightOffset || 0,
+      viewTopOffset: props.viewTopOffset || 0,
+      viewBottomOffset: props.viewBottomOffset || 0,
+      viewLeftOffset: props.viewLeftOffset || 0,
+      viewRightOffset: props.viewRightOffset || 0,
 
       /* Inset of the view, useful if you want to apply a padding at your alert content */
-      viewTopInset: props.viewTopInset || 0,
-      viewBottomInset: props.viewBottomInset || 0,
-      viewLeftInset: props.viewLeftInset || 0,
-      viewRightInset: props.viewRightInset || 0,
+      viewTopInset: props.viewTopInset || 0,
+      viewBottomInset: props.viewBottomInset || 0,
+      viewLeftInset: props.viewLeftInset || 0,
+      viewRightInset: props.viewRightInset || 0,
 
       /* Number of Lines for Title and Message */
       titleNumberOfLines: (props.titleNumberOfLines == undefined) ? 1 : props.titleNumberOfLines,
@@ -112,13 +100,14 @@ class MessageBar extends Component {
     };
   }
 
-
   /*
   * Show the alert
   */
   showMessageBarAlert() {
+    console.log('this.alertShown', this.alertShown);
+    console.log('this.state', this.state);
     // If an alert is already shonw or doesn't have a title or a message, do nothing
-    if (this.alertShown || (this.state.title == null && this.state.message == null)) {
+    if (this.alertShown || (!this.state.title && !this.state.message)) {
       return;
     }
 
@@ -132,7 +121,6 @@ class MessageBar extends Component {
       duration: this.state.durationToShow
     }).start(this._showMessageBarAlertComplete());
   }
-
 
   /*
   * Hide the alert after a delay, typically used for auto-hidding
@@ -149,14 +137,12 @@ class MessageBar extends Component {
     }
   }
 
-
   /*
   * Return true if the MessageBar is currently displayed, otherwise false
   */
   isMessageBarShown() {
     return this.alertShown;
   }
-
 
   /*
   * Hide the alert, typically used when user tap the alert
@@ -176,8 +162,7 @@ class MessageBar extends Component {
     }).start(this._hideMessageBarAlertComplete());
   }
 
-
-  _hideMessageBarAlertComplete() {
+  _hideMessageBarAlertComplete() {
     // The alert is not shown anymore
     this.alertShown = false;
 
@@ -196,7 +181,6 @@ class MessageBar extends Component {
     }
   }
 
-
   /*
   * Callback executed when the user tap the alert
   */
@@ -212,7 +196,6 @@ class MessageBar extends Component {
     }
   }
 
-
   /*
   * Callback executed when alert is shown
   */
@@ -222,7 +205,6 @@ class MessageBar extends Component {
     }
   }
 
-
   /*
   * Callback executed when alert is hidden
   */
@@ -231,7 +213,6 @@ class MessageBar extends Component {
       this.state.onHide();
     }
   }
-
 
   /*
   * Change the background color and the line stroke color depending on the alertType
@@ -245,64 +226,62 @@ class MessageBar extends Component {
     let strokeColor;
 
     switch (alertType) {
-      case 'success':
-        backgroundColor = this.state.stylesheetSuccess.backgroundColor;
-        strokeColor = this.state.stylesheetSuccess.strokeColor;
-        break;
-      case 'error':
-        backgroundColor = this.state.stylesheetError.backgroundColor;
-        strokeColor = this.state.stylesheetError.strokeColor;
-        break;
-      case 'warning':
-        backgroundColor = this.state.stylesheetWarning.backgroundColor;
-        strokeColor = this.state.stylesheetWarning.strokeColor;
-        break;
-      case 'info':
-        backgroundColor = this.state.stylesheetInfo.backgroundColor;
-        strokeColor = this.state.stylesheetInfo.strokeColor;
-        break;
-      default:
-        backgroundColor = this.state.stylesheetExtra.backgroundColor;
-        strokeColor = this.state.stylesheetExtra.strokeColor;
-        break;
+    case 'success':
+      backgroundColor = this.state.stylesheetSuccess.backgroundColor;
+      strokeColor = this.state.stylesheetSuccess.strokeColor;
+      break;
+    case 'error':
+      backgroundColor = this.state.stylesheetError.backgroundColor;
+      strokeColor = this.state.stylesheetError.strokeColor;
+      break;
+    case 'warning':
+      backgroundColor = this.state.stylesheetWarning.backgroundColor;
+      strokeColor = this.state.stylesheetWarning.strokeColor;
+      break;
+    case 'info':
+      backgroundColor = this.state.stylesheetInfo.backgroundColor;
+      strokeColor = this.state.stylesheetInfo.strokeColor;
+      break;
+    default:
+      backgroundColor = this.state.stylesheetExtra.backgroundColor;
+      strokeColor = this.state.stylesheetExtra.strokeColor;
+      break;
     }
 
     this.setState({
-      backgroundColor: backgroundColor,
-      strokeColor: strokeColor
+      backgroundColor,
+      strokeColor
     });
   }
-
 
   /*
   * Change view<Position>Offset property depending on the state position
   */
   _changeOffsetByPosition(position) {
     switch (position) {
-      case 'top':
-        this.setState({
-          viewBottomOffset: null
-        });
-        break;
-      case 'bottom':
-        this.setState({
-          viewTopOffset: null
-        });
-        break;
-      default:
-        this.setState({
-          viewBottomOffset: null
-        });
-        break;
+    case 'top':
+      this.setState({
+        viewBottomOffset: null
+      });
+      break;
+    case 'bottom':
+      this.setState({
+        viewTopOffset: null
+      });
+      break;
+    default:
+      this.setState({
+        viewBottomOffset: null
+      });
+      break;
     }
   }
-
 
   /*
   * Set the animation transformation depending on the chosen animationType, or depending on the state's position if animationType is not overridden
   */
   _apllyAnimationTypeTransformation() {
-    let position = this.state.position;
+    const position = this.state.position;
     let animationType = this.state.animationType;
 
     if (animationType === undefined) {
@@ -315,44 +294,43 @@ class MessageBar extends Component {
     }
 
     switch (animationType) {
-      case 'SlideFromTop':
-         var animationY = this.animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [-windowHeight, 0]
-        });
-        this.animationTypeTransform = [{ translateY: animationY }];
-        break;
-      case 'SlideFromBottom':
-         var animationY = this.animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [windowHeight, 0]
-        });
-        this.animationTypeTransform = [{ translateY: animationY }];
-        break;
-      case 'SlideFromLeft':
-         var animationX = this.animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [-windowWidth, 0]
-        });
-        this.animationTypeTransform = [{ translateX: animationX }];
-        break;
-      case 'SlideFromRight':
-         var animationX = this.animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [windowWidth, 0]
-        });
-        this.animationTypeTransform = [{ translateX: animationX }];
-        break;
-      default:
-         var animationY = this.animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [-windowHeight, 0]
-        });
-        this.animationTypeTransform = [{ translateY: animationY }];
-        break;
+    case 'SlideFromTop':
+      var animationY = this.animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-windowHeight, 0]
+      });
+      this.animationTypeTransform = [{ translateY: animationY }];
+      break;
+    case 'SlideFromBottom':
+      var animationY = this.animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [windowHeight, 0]
+      });
+      this.animationTypeTransform = [{ translateY: animationY }];
+      break;
+    case 'SlideFromLeft':
+      var animationX = this.animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-windowWidth, 0]
+      });
+      this.animationTypeTransform = [{ translateX: animationX }];
+      break;
+    case 'SlideFromRight':
+      var animationX = this.animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [windowWidth, 0]
+      });
+      this.animationTypeTransform = [{ translateX: animationX }];
+      break;
+    default:
+      var animationY = this.animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-windowHeight, 0]
+      });
+      this.animationTypeTransform = [{ translateY: animationY }];
+      break;
     }
   }
-
 
   /*
   * Alert Rendering Methods
@@ -360,33 +338,35 @@ class MessageBar extends Component {
 
   render() {
     // Set the animation transformation depending on the chosen animationType, or depending on the state's position if animationType is not overridden
-    this._apllyAnimationTypeTransformation();
-
-    return (
-      <Animated.View style={{ transform: this.animationTypeTransform, backgroundColor: this.state.backgroundColor, borderColor: this.state.strokeColor, borderBottomWidth: 1, position: 'absolute', top: this.state.viewTopOffset, bottom: this.state.viewBottomOffset, left: this.state.viewLeftOffset, right: this.state.viewRightOffset, paddingTop: this.state.viewTopInset, paddingBottom: this.state.viewBottomInset, paddingLeft: this.state.viewLeftInset, paddingRight: this.state.viewRightInset }}>
-        <TouchableOpacity onPress={()=>{this._alertTapped()}} style={{ flex: 1 }}>
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', padding: 10 }} >
-            { this.renderImage() }
-            <View style={{ flex: 1, flexDirection: 'column', alignSelf: 'stretch', justifyContent: 'center', marginLeft: 10 }} >
-              { this.renderTitle() }
-              { this.renderMessage() }
+    if (this.state.message) {
+      this._apllyAnimationTypeTransformation();
+      return (
+        <Animated.View style={{ transform: this.animationTypeTransform, backgroundColor: this.state.backgroundColor, borderColor: this.state.strokeColor, borderBottomWidth: 1, position: 'absolute', top: this.state.viewTopOffset, bottom: this.state.viewBottomOffset, left: this.state.viewLeftOffset, right: this.state.viewRightOffset, paddingTop: this.state.viewTopInset, paddingBottom: this.state.viewBottomInset, paddingLeft: this.state.viewLeftInset, paddingRight: this.state.viewRightInset }}>
+          <TouchableOpacity onPress={() => { this._alertTapped(); }} style={{ flex: 1 }}>
+            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', padding: 10 }} >
+              { this.renderImage() }
+              <View style={{ flex: 1, flexDirection: 'column', alignSelf: 'stretch', justifyContent: 'center', marginLeft: 10 }} >
+                { this.renderTitle() }
+                { this.renderMessage() }
+              </View>
             </View>
-          </View>
-        </TouchableOpacity>
-      </Animated.View>
-    );
+          </TouchableOpacity>
+        </Animated.View>
+      );
+    }
+    return null;
   }
 
   renderImage() {
-    if (this.state.avatar != null) {
-      var imageSource;
-      let uri = this.state.avatar;
-      if (!!(typeof uri === 'string' && uri.match(/^https?:/))) {
+    if (this.state.avatar) {
+      let imageSource;
+      const uri = this.state.avatar;
+      if (typeof uri === 'string' && uri.match(/^https?:/)) {
         // this is a network file
-        imageSource = { uri: this.state.avatar }
+        imageSource = { uri: this.state.avatar };
       } else {
         // this is a local file : require('<path/to/my/local/image.extension>')
-        imageSource = this.state.avatar
+        imageSource = this.state.avatar;
       }
 
       return (
@@ -396,9 +376,12 @@ class MessageBar extends Component {
   }
 
   renderTitle() {
-    if (this.state.title != null) {
+    if (this.state.title) {
       return (
-        <Text numberOfLines={this.state.titleNumberOfLines} style={this.state.titleStyle}>
+        <Text
+            numberOfLines={this.state.titleNumberOfLines}
+            style={this.state.titleStyle}
+        >
           { this.state.title }
         </Text>
       );
@@ -406,9 +389,12 @@ class MessageBar extends Component {
   }
 
   renderMessage() {
-    if (this.state.message != null) {
+    if (this.state.message) {
       return (
-        <Text numberOfLines={this.state.messageNumberOfLines} style={this.state.messageStyle}>
+        <Text
+            numberOfLines={this.state.messageNumberOfLines}
+            style={this.state.messageStyle}
+        >
           { this.state.message }
         </Text>
       );
